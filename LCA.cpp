@@ -25,62 +25,52 @@ int pre[maxn],dep[maxn];
 
 vector<int> to[maxn];
 
-void init()
-{
+void init() {
 	mem(f,-1);
 	mem(pre,-1);
 	for(int i = 0;i < maxn;i++) to[i].clear();
 }
 
-void addEdge(int u,int v)
-{
+void addEdge(int u,int v) {
 	to[u].push_back(v);
 	to[v].push_back(u);
 }
 
-void getF(int x,int d)
-{
+void getF(int x,int d) {
 	dep[x] = d;
 	if(pre[x] != -1) f[x][0] = pre[x];
 	for(int i = 1;i <= 15;i++) 
 		if(f[x][i-1] != -1) f[x][i] = f[f[x][i-1]][i-1];
 	int sz = to[x].size();
-	for(int i = 0;i < sz;i++) 
-	{
+	for(int i = 0;i < sz;i++) {
 		if(to[x][i] == pre[x]) continue;
 		pre[to[x][i]] = x;
 		getF(to[x][i],d+1);
 	}
 }
 
-int getLCA(int u,int v)
-{
+int getLCA(int u,int v) {
 	if(dep[u] < dep[v]) swap(u,v);
-	for(int i = 15;i >= 0;i--)
-	{
+	for(int i = 15;i >= 0;i--) {
 		if(f[u][i] != -1 && dep[f[u][i]] >= dep[v]) u = f[u][i];
 		if(dep[u] == dep[v]) break;
 	}
 	if(u == v) return u;
-	for(int i = 15;i >= 0;i--)
-	{
+	for(int i = 15;i >= 0;i--) {
 		if(f[u][i] != f[v][i]) u = f[u][i],v = f[v][i];
 	}
 	return f[u][0];
 }
 
-int main()
-{
+int main() {
 	int T;
 	scanf("%d",&T);
-	while(T--)
-	{
+	while(T--) {
 		init();
 		mem(de,0);
 		int n;
 		scanf("%d",&n);
-		for(int i = 0;i < n-1;i++) 
-		{
+		for(int i = 0;i < n-1;i++) {
 			int u,v;
 			scanf("%d%d",&u,&v);
 			addEdge(u,v);
